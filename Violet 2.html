@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Violet</title>
+<meta name="description" content="An alternative app store that aims to make sideloading apps as seamless as possible.">
+<meta property="og:title" content="Violet">
+<meta property="og:description" content="An alternative app store that aims to make sideloading apps as seamless as possible.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🟣</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;700&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600&display=swap">
+<style>
+:root{--bg:#0f0a1f;--bg2:#1a1233;--text:#f4f0ff;--muted:#b4a9d6;--accent:#8b5cf6;--accent2:#c084fc;--card:#1c1438;--line:#2e2354;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#f7f3ff;--bg2:#ece4ff;--text:#1c1233;--muted:#5b4f80;--card:#fff;--line:#ddd2f7}}
+:root[data-theme="light"]{--bg:#f7f3ff;--bg2:#ece4ff;--text:#1c1233;--muted:#5b4f80;--card:#fff;--line:#ddd2f7}
+:root[data-theme="dark"]{--bg:#0f0a1f;--bg2:#1a1233;--text:#f4f0ff;--muted:#b4a9d6;--card:#1c1438;--line:#2e2354}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth;overflow-x:hidden;max-width:100%}
+html,body{overscroll-behavior-x:none;touch-action:pan-y}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Helvetica Neue","Segoe UI",Roboto,system-ui,sans-serif;line-height:1.6;overflow-x:hidden;max-width:100vw;position:relative}
+a{color:inherit}
+[hidden]{display:none!important}
+.bar{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(var(--p,0));background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:50}
+.nav{position:sticky;top:0;z-index:40;display:flex;justify-content:flex-end;gap:14px;padding:18px 28px;backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 70%,transparent)}
+.nav a{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;color:var(--muted);transition:color .2s,background .2s}
+.nav a:hover,.nav a:focus-visible{color:var(--text);background:var(--line);outline:none}
+.nav svg{width:20px;height:20px;fill:currentColor}
+.hero{position:relative;max-width:1100px;margin:0 auto;padding:40px 28px 90px;display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;overflow-x:clip}
+.hero::before{content:"";position:absolute;inset:-10% -20% auto auto;width:640px;height:640px;background:radial-gradient(circle,var(--accent) 0%,transparent 65%);opacity:.28;filter:blur(30px);z-index:0;animation:glow 8s ease-in-out infinite alternate}
+@keyframes glow{to{transform:translate(-40px,30px) scale(1.1);opacity:.4}}
+.hero>*{position:relative;z-index:1}
+.hero>div:first-child{transform:translateY(calc(var(--sy,0)*.12px))}
+h1{font-size:clamp(3rem,8vw,5.4rem);line-height:1;margin:0 0 18px;letter-spacing:-.03em;font-weight:800}
+.lead{font-size:1.2rem;color:var(--muted);max-width:30em;margin:0 0 30px}.lead strong{color:var(--text)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;padding:13px 26px;border-radius:12px;text-decoration:none;font-weight:600;transition:transform .15s,box-shadow .2s}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 8px 24px -8px var(--accent)}
+.btn.ghost{border:1px solid var(--line);background:var(--card)}
+.btn:hover{transform:translateY(-2px)}.btn:focus-visible{outline:2px solid var(--accent2);outline-offset:3px}
+.phones{--s:.8;position:relative;height:520px;display:flex;justify-content:center;align-items:center;transform:translateY(calc(var(--sy,0)*-.25px)) scale(calc(1 - var(--sp,0)*.12));opacity:calc(1 - var(--sp,0)*.6);will-change:transform}
+.phone{position:absolute;width:230px;height:470px;border-radius:38px;border:7px solid #0a0618;background:linear-gradient(160deg,var(--accent),#4c1d95 70%);box-shadow:0 30px 60px -20px rgba(0,0,0,.6),inset 0 0 0 2px rgba(255,255,255,.08);overflow:hidden}
+.phone::before{content:"";position:absolute;top:10px;left:50%;width:70px;height:20px;border-radius:12px;background:#0a0618;transform:translateX(-50%)}
+.ui{position:absolute;inset:48px 14px 14px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-content:start}
+.ui i{aspect-ratio:1;border-radius:14px;background:rgba(255,255,255,.22);display:block}.ui i:nth-child(3n+2){background:rgba(255,255,255,.34)}.ui i:nth-child(5n){background:rgba(255,255,255,.14)}
+.ui b{grid-column:1/-1;height:70px;border-radius:16px;background:rgba(255,255,255,.18);margin-bottom:6px}
+.p1{transform:translateX(-62px) rotate(-8deg);animation:float1 6s ease-in-out infinite;filter:brightness(.8)}
+.p2{transform:translateX(62px) rotate(7deg) translateY(24px);animation:float2 6s ease-in-out infinite}
+@keyframes float1{50%{transform:translateX(-72px) rotate(-10deg) translateY(-14px)}}
+@keyframes float2{50%{transform:translateX(72px) rotate(9deg) translateY(10px)}}
+.hdw{position:relative;width:420px;height:480px;transform:scale(var(--s,1));flex:none}
+.hd{position:absolute;background:#000;box-shadow:0 0 0 2px #5a5a66,0 0 0 4px #1b1b20,0 30px 60px -20px rgba(0,0,0,.6);overflow:visible}
+.hd::before,.hd::after{content:"";position:absolute;background:#4a4a54}
+.hs{position:absolute;inset:0;border-radius:inherit;overflow:hidden;background:linear-gradient(165deg,#5b36c9,#2a1a6e 75%);padding:18px 14px 14px}
+.hbar{height:34px;border-radius:12px;background:rgba(255,255,255,.2);margin-bottom:12px}
+.hg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.hg.g3{grid-template-columns:repeat(3,1fr)}
+.hg i{aspect-ratio:1;border-radius:12px;background:rgba(255,255,255,.22)}.hg i:nth-child(3n+2){background:rgba(255,255,255,.36)}.hg i:nth-child(5n){background:rgba(245,168,216,.75)}
+.hpad{left:0;top:40px;width:310px;height:410px;border:10px solid #0a0a0c;border-radius:30px;transform:rotate(-5deg);animation:hp1 7s ease-in-out infinite}
+.hpad::before{right:-13px;top:60px;width:3px;height:28px;border-radius:0 2px 2px 0;box-shadow:0 40px 0 #4a4a54}
+.hpad::after{right:44px;top:-13px;width:36px;height:3px;border-radius:2px 2px 0 0}
+.hpad .hs{border-radius:20px;padding-top:22px}
+.hphone{left:228px;top:110px;width:190px;height:380px;border:8px solid #0a0a0c;border-radius:36px;transform:rotate(5deg);animation:hp2 7s ease-in-out infinite;z-index:2}
+.hphone::before{left:-11px;top:70px;width:3px;height:30px;border-radius:2px 0 0 2px;box-shadow:0 44px 0 #4a4a54}
+.hphone::after{right:-11px;top:110px;width:3px;height:56px;border-radius:0 2px 2px 0}
+.hphone .hs{border-radius:28px;padding-top:34px;background:linear-gradient(165deg,#7c4df0,#3b1f94 80%)}
+.hpill{position:absolute;top:8px;left:50%;width:62px;height:18px;border-radius:12px;background:#000;transform:translateX(-50%)}
+@keyframes hp1{50%{transform:rotate(-6.500deg) translateY(-12px)}}
+@keyframes hp2{50%{transform:rotate(6.500deg) translateY(10px)}}
+.hdw{width:440px!important;height:640px!important}
+.hph{position:absolute;left:50%;top:50%;width:282px;height:572px;margin:-286px 0 0 -141px;border:9px solid #0b0b0d;border-radius:50px;background:#1b1b1d;box-shadow:0 0 0 2px #4a4a54,0 0 0 4px #1b1b20,14px 10px 0 -2px #2a2a30;transform:perspective(1800px) rotateZ(-32deg) rotateX(8deg) rotateY(-12deg);animation:hbob 7s ease-in-out infinite;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,"Helvetica Neue",system-ui,sans-serif;color:#fff}
+@keyframes hbob{50%{transform:perspective(1800px) rotateZ(-33deg) rotateX(9deg) rotateY(-13deg) translateY(-14px)}}
+.hsc{position:absolute;inset:0;padding-top:76px;overflow:hidden;background:linear-gradient(#1b1b1d,#1b1b1d)}
+.hban{position:absolute;top:56px;left:10px;right:10px;height:96px;border-radius:0 0 26px 26px;background:linear-gradient(#4b2596,#3a1d75);z-index:0}
+.hisl{position:absolute;top:10px;left:50%;width:84px;height:24px;border-radius:14px;background:#000;transform:translateX(-50%);z-index:3}
+.hst{position:absolute;top:12px;left:22px;right:18px;display:flex;justify-content:space-between;align-items:center;font-size:.78rem;font-weight:600;z-index:2}
+.hic{display:flex;gap:5px;align-items:center}.hic b{width:22px;height:11px;border-radius:4px;background:#fff;display:block}
+.htop{position:absolute;top:44px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 14px;font-size:.85rem;z-index:2}
+.htop .pl{font-size:1.5rem;font-weight:300;color:#a78bfa}.htop .tc{font-weight:600}.htop .ra{color:#a78bfa}
+.hsc .big,.hsc .ac{position:relative;z-index:1}
+.hsc .ac s{font-size:1.25rem}
+.htb{position:absolute;left:0;right:0;bottom:0;display:flex;background:#161618;border-top:.5px solid #38383a;padding:8px 0 20px;z-index:2}
+.htb span{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.6rem;color:#8e8e93}
+.htb span.on{color:#a78bfa}.htb svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.hph::after{content:"";position:absolute;bottom:6px;left:50%;width:110px;height:4px;border-radius:3px;background:#fff;transform:translateX(-50%);z-index:5}
+.hshadow{position:absolute;left:50%;bottom:6px;width:340px;height:70px;margin-left:-110px;background:radial-gradient(ellipse,rgba(0,0,0,.5),transparent 70%);filter:blur(12px)}
+.hsc .pill{display:inline-block}
+@media (prefers-reduced-motion:reduce){.hph{animation:none}}
+.section{max-width:1100px;margin:0 auto;padding:30px 28px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px}
+.card small{color:var(--accent2);font-weight:600}.card h2{font-size:2rem;margin:6px 0 12px;letter-spacing:-.02em}.card p{margin:0;color:var(--muted)}.card a{color:var(--accent2)}
+footer{text-align:center;color:var(--muted);padding:50px 20px 60px;font-size:.9rem}
+html.js .rv{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease;transition-delay:var(--d,0s)}
+html.js .rv.in{opacity:1;transform:none}
+.gs{max-width:760px}.gs h1{font-size:clamp(2.4rem,7vw,4rem);margin-top:10px}
+.back{display:inline-block;color:var(--muted);text-decoration:none;margin-bottom:10px}.back:hover{color:var(--text)}
+.gh{font-size:1.6rem;letter-spacing:-.02em;margin:46px 0 16px}
+.need{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.need li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;color:var(--muted)}
+.guide{list-style:none;margin:0;padding:0;counter-reset:g;display:grid;gap:14px}
+.guide li{counter-increment:g;position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px 22px 76px}
+.guide li::before{content:counter(g);position:absolute;left:20px;top:20px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.guide h4{margin:0 0 4px;font-size:1.1rem}.guide p{margin:0;color:var(--muted)}.guide b{color:var(--text)}
+.warn{margin-top:30px;padding:18px 20px;border-radius:16px;border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.demo{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,600px);gap:50px;align-items:center;padding-top:50px;padding-bottom:50px}
+.demo h2{font-size:clamp(2rem,5vw,3rem);letter-spacing:-.03em;line-height:1.05;margin:6px 0 14px}
+.demo p{color:var(--muted);max-width:30em}.demo ul{color:var(--muted);padding-left:20px}.demo li{margin:6px 0}
+.demo small{color:var(--accent2);font-weight:600}
+.dp{position:relative;width:290px;height:580px;border-radius:44px;border:8px solid #0a0a0c;background:#000;color:#fff;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);overflow:hidden;display:flex;flex-direction:column;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,"Helvetica Neue","Segoe UI",Roboto,system-ui,sans-serif}
+.dp::before{content:"";position:absolute;top:9px;left:50%;width:82px;height:23px;border-radius:14px;background:#0a0a0c;transform:translateX(-50%);z-index:3}
+.dp button{font:inherit;cursor:pointer;border:0;color:inherit;background:none}
+.sb{display:flex;justify-content:space-between;padding:14px 24px 0;font-size:.78rem;font-weight:600;height:40px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:6px 16px 0;min-height:30px;font-size:.95rem;color:#a78bfa}
+.top button{color:#a78bfa;font-size:.95rem}.top .pl{font-size:1.7rem;line-height:1;font-weight:300}
+.ttl{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;padding:2px 16px 8px}
+.dbody{flex:1;overflow-y:auto;padding:0 0 10px}
+.sh{font-size:.72rem;color:#8e8e93;font-weight:600;letter-spacing:.04em;padding:10px 16px 6px;text-transform:uppercase}
+.grp{margin:0 12px 12px;background:#1c1c1e;border-radius:12px;overflow:hidden}
+.ar{display:flex;align-items:center;gap:11px;padding:10px 12px;border-bottom:.5px solid #38383a}.ar:last-child{border:0}
+.ar s{width:50px;height:50px;border-radius:12px;background:var(--c);flex:none;display:grid;place-items:center;font-size:1.3rem}
+.ar div{flex:1;line-height:1.25;min-width:0}.ar b{display:block;font-size:.95rem;font-weight:600}.ar small{color:#8e8e93;font-size:.75rem}
+.pill{background:rgba(167,139,250,.18);color:#a78bfa;border-radius:99px;padding:5px 13px;font-size:.72rem;font-weight:800;letter-spacing:.02em;min-width:64px;text-align:center}
+.pill.r{background:rgba(255,69,58,.18);color:#ff6961}
+.jb{font-size:.6rem;background:#32d74b;color:#04200a;border-radius:5px;padding:1px 5px;margin-left:6px;font-weight:800;vertical-align:1px}
+.lr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:.5px solid #38383a;font-size:.92rem}.lr:last-child{border:0}.lr span{color:#8e8e93}
+.tg{width:46px;height:28px;border-radius:99px;background:#39393d;position:relative;transition:background .2s}
+.tg::after{content:"";position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s}
+.tg.on{background:#8b5cf6}.tg.on::after{transform:translateX(18px)}
+.news{margin:0 12px 12px;height:130px;border-radius:14px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(135deg,var(--a),var(--b))}
+.news small{opacity:.8;font-size:.7rem;font-weight:700;text-transform:uppercase}.news b{font-size:1.1rem;line-height:1.2}
+.hint{color:#8e8e93;font-size:.75rem;margin:0 18px 10px}
+.tb{display:flex;border-top:.5px solid #38383a;background:#121214;padding-bottom:12px}
+.tb button{flex:1;padding:8px 0 2px;color:#8e8e93;font-size:.62rem;display:flex;flex-direction:column;align-items:center;gap:3px}
+.tb button.on{color:#a78bfa}.tb svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.toast{position:absolute;left:50%;bottom:76px;transform:translate(-50%,20px);background:#f2f2f7;color:#111;padding:8px 14px;border-radius:99px;font-size:.78rem;font-weight:600;opacity:0;transition:.25s;pointer-events:none;white-space:nowrap;z-index:4}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.dev{position:relative;width:max-content;max-width:100%;margin:0 auto}
+.dev.ipad{width:100%;max-width:600px}
+.dev::before,.dev::after{content:"";position:absolute;background:#4a4a54;z-index:0}
+.dev::before{left:-3px;top:92px;width:3px;height:34px;border-radius:2px 0 0 2px;box-shadow:0 50px 0 #4a4a54,0 100px 0 #4a4a54}
+.dev::after{right:-3px;top:150px;width:3px;height:74px;border-radius:0 2px 2px 0}
+.dev.ipad::before{left:auto;right:-3px;top:70px;height:30px;border-radius:0 2px 2px 0;box-shadow:0 42px 0 #4a4a54}
+.dev.ipad::after{right:56px;top:-3px;width:40px;height:3px;border-radius:2px 2px 0 0}
+.dp{box-shadow:0 0 0 2px #5a5a66,0 0 0 4px #1b1b20,0 30px 60px -20px rgba(0,0,0,.6)!important;z-index:1}
+.dp::after{content:"";position:absolute;bottom:6px;left:50%;width:96px;height:4px;border-radius:3px;background:#fff;opacity:.85;transform:translateX(-50%);z-index:5;pointer-events:none}
+.dp.ipad::after{width:130px;bottom:5px}
+.ar s,.dt s{border-radius:22.4%}
+.ar[data-det]{cursor:pointer}
+.pill{border:0;white-space:nowrap}.pill.op{background:#0a84ff;color:#fff}.pill.gr{background:#30d158;color:#04200a}.pill.gr .spin{border-color:rgba(4,32,10,.25);border-top-color:#04200a}
+.spin{display:inline-block;width:14px;height:14px;border:2.500px solid rgba(167,139,250,.3);border-top-color:#a78bfa;border-radius:50%;animation:sp .8s linear infinite;vertical-align:-3px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.dt{display:flex;gap:14px;padding:4px 16px 8px;align-items:center}
+.dt s{width:84px;height:84px;flex:none;background:var(--c);display:grid;place-items:center;font-size:2.2rem}
+.dt div{flex:1;line-height:1.25;display:flex;flex-direction:column;align-items:flex-start;gap:3px}.dt b{font-size:1.1rem}.dt small{color:#8e8e93;margin-bottom:6px}
+.ab{margin:0 16px 8px;font-size:.85rem;color:#d4d0e2;line-height:1.5}
+.top .tc{font-weight:600;color:#fff;font-size:.95rem}
+.big{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;padding:6px 16px 8px}
+.ac{margin:0 12px 10px;border-radius:20px;padding:12px;display:flex;align-items:center;gap:11px;background:color-mix(in srgb,var(--c) 30%,#1c1c1e)}
+.ac.off{background:#2c2c2e}
+.ac s{width:50px;height:50px;border-radius:22.4%;background:var(--c);flex:none;display:grid;place-items:center;font-size:1.3rem}
+.ac>div:nth-child(2){flex:1;min-width:0;line-height:1.25}.ac b{display:block;font-size:.95rem;font-weight:700}.ac small{color:rgba(255,255,255,.55);font-size:.75rem}
+.ex{display:flex;flex-direction:column;align-items:center;gap:2px}.ex i{font-style:normal;font-size:.6rem;color:rgba(255,255,255,.6)}
+.pill.dy{background:#34c759;color:#fff}.pill.rd{background:#ff453a;color:#fff}.pill.a1{background:#a855f7;color:#fff}.pill.a2{background:#3ec6f5;color:#06323f}
+.ac[data-tog]{cursor:pointer}
+.dban{position:absolute;top:44px;left:10px;right:10px;height:92px;border-radius:0 0 26px 26px;background:linear-gradient(#4b2596,#3a1d75);z-index:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.dban i{font-style:normal;font-size:.68rem;color:rgba(255,255,255,.55)}
+.dp .top,.dp .ttl,.dp .dbody{position:relative;z-index:1}
+.dp.ipad .mn{position:relative}
+.dp .hic{display:flex;gap:5px;align-items:center}.dp .hic b{width:22px;height:11px;border-radius:4px;background:#fff;display:block}
+.q{width:22px;height:22px;border:1.5px solid #8b5cf6;border-radius:50%;display:grid;place-items:center;color:#8b5cf6;font-size:.7rem;font-weight:700;flex:none}
+.ac{position:relative}
+.ac>div:nth-child(2),.ar>div{min-width:0}
+.ac b,.ac small,.ar b,.ar small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill,.ex,.q,.ac s,.ar s{flex:none}
+.ac{gap:10px;padding:11px}
+.ac b{font-size:.9rem;letter-spacing:0}.ac small{font-size:.7rem}
+.ex{min-width:62px}
+.pill{letter-spacing:0;padding:5px 11px;min-width:60px}
+.dp.ipad .ac b{font-size:.95rem}
+.dp .pill{font-weight:800;font-size:.72rem;letter-spacing:.02em}
+.dp .rowb{width:100%;text-align:left;font-weight:600;font-size:.92rem}
+.ac[data-det],.ar[data-det]{cursor:pointer}
+.dt s{width:96px;height:96px;font-size:2.6rem}
+.stt{display:flex;margin:6px 12px 4px;padding:10px 0;border-top:.5px solid #38383a;border-bottom:.5px solid #38383a}
+.stt div{flex:1;text-align:center;border-right:.5px solid #38383a}.stt div:last-child{border:0}
+.stt small{display:block;font-size:.6rem;color:#8e8e93;font-weight:700}.stt b{font-size:.95rem}
+.shots{display:flex;gap:10px;overflow-x:auto;padding:0 16px 8px}
+.shot{flex:none;width:104px;height:190px;border-radius:16px;background:linear-gradient(160deg,var(--c),#1c1c1e);padding:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:7px;align-content:start;border:.5px solid #38383a}
+.shot b{grid-column:1/-1;height:26px;border-radius:8px;background:rgba(255,255,255,.2)}
+.shot i{aspect-ratio:1;border-radius:9px;background:rgba(255,255,255,.22)}
+.nc{margin:0 12px 16px;cursor:pointer}
+.nci{height:150px;border-radius:18px;padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;background:linear-gradient(135deg,var(--a),var(--b))}
+.nci small,.nh small{font-size:.62rem;font-weight:800;letter-spacing:.06em;opacity:.8}
+.nci b{font-size:1.15rem;font-weight:800;line-height:1.15;letter-spacing:-.01em}
+.ncs{font-size:.68rem;color:#8e8e93;font-weight:600;text-transform:uppercase;margin:8px 4px 0}
+.ncc{margin:2px 4px 0;font-size:.82rem;color:#d4d0e2}
+.nh{margin:4px 12px 0;height:170px;border-radius:20px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;background:linear-gradient(135deg,var(--a),var(--b))}
+.nh b{font-size:1.4rem;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.nm{margin:10px 16px 6px;font-size:.7rem;color:#8e8e93;font-weight:600;text-transform:uppercase}
+.dp.ipad{width:100%;max-width:600px;height:440px;border-radius:28px;border-width:10px;flex-direction:row}
+.dp.ipad::before{display:none}
+.dp.ipad .mn{flex:1;display:flex;flex-direction:column;min-width:0}
+.dp.ipad .sb{height:28px;padding-top:8px}
+.side{width:150px;flex:none;background:#111113;border-right:.5px solid #38383a;padding:34px 10px 12px}
+.side h6{margin:0 0 14px;padding:0 8px;font-size:1.2rem;font-weight:800;letter-spacing:-.02em}
+.side button{display:flex;align-items:center;gap:9px;width:100%;padding:9px 8px;border-radius:9px;color:#d8d3ea;font-size:.85rem;margin-bottom:3px;text-align:left}
+.side button.on{background:rgba(167,139,250,.2);color:#c4b0ff}
+.side svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.dp.ipad .grp{display:grid;grid-template-columns:1fr 1fr}
+.dp.ipad .ar{border-right:.5px solid #38383a}
+.dp.ipad .toast{bottom:20px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:6px 0 16px}
+.seg button{font:inherit;font-weight:600;cursor:pointer;color:var(--muted);background:none;border:0;padding:8px 18px}
+.seg button.on{background:var(--accent);color:#fff}
+@media (max-width:820px){.demo{grid-template-columns:1fr;gap:30px}}
+@media (max-width:820px){.hero{grid-template-columns:1fr;text-align:center;padding-top:10px}.lead{margin-inline:auto}.btns{justify-content:center}.grid{grid-template-columns:1fr}.phones{height:430px;--s:.62}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html.js .rv{opacity:1;transform:none}}
+
+/* ---- sidestore-style design ---- */
+body{font-family:Figtree,-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,"Segoe UI",system-ui,sans-serif;background:linear-gradient(165deg,#2a1b63 0%,#1b1338 38%,#130e27 100%) fixed;background-color:#130e27}
+.nav{position:sticky;top:14px;width:calc(100% - 32px);max-width:1150px;margin:22px auto 0;padding:10px 14px;justify-content:space-between;align-items:center;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(34,25,66,.55);backdrop-filter:blur(14px)}
+.nav .logo{width:44px;height:44px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#fff}
+.nav .soc{display:flex;gap:4px;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+.nav .soc a{width:38px;height:38px;color:#fff;border-radius:50%}.nav .soc a:hover{background:rgba(255,255,255,.1)}
+.nav .soc svg{width:22px;height:22px}
+.hero{max-width:1250px;padding:70px 32px 110px;min-height:76vh;overflow:visible}
+.hero::before{display:none}
+h1{font-family:Poppins,Figtree,system-ui,sans-serif;font-weight:500;font-size:clamp(3.8rem,9vw,7.2rem);letter-spacing:-.035em;line-height:1.05;margin:0 0 26px;background:linear-gradient(180deg,#fff 35%,#9a96ae 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:clamp(1.15rem,2vw,1.5rem);font-weight:300;line-height:1.6;color:#d8d2ee;max-width:21em;margin-bottom:34px}
+.lead strong{font-weight:700;color:#fff}
+.btns{gap:16px}
+.btn{height:58px;padding:0 52px;display:inline-flex;align-items:center;border-radius:999px;font-size:1.25rem;font-weight:500;box-shadow:none}
+.btn.primary{background:#4a2db8;color:#fff;box-shadow:none}
+.btn.ghost{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);color:#fff}
+.phones{--s:1.08;height:680px;justify-content:flex-start}
+.hdw{transform:scale(var(--s)) translateX(90px)}
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:28px}
+.gs h1{font-size:clamp(2.6rem,7vw,4.4rem)}
+html{background:#130e27}
+body{background:none!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(900px 620px at 12% 4%,rgba(124,77,240,.55),transparent 62%),radial-gradient(820px 720px at 92% 28%,rgba(76,41,184,.5),transparent 62%),radial-gradient(700px 500px at 40% 100%,rgba(91,54,201,.3),transparent 65%),linear-gradient(165deg,#2c1c68 0%,#1b1338 45%,#110c24 100%);background-size:140% 140%;animation:bgdrift 18s ease-in-out infinite alternate}
+@keyframes bgdrift{from{background-position:0% 0%}to{background-position:100% 100%}}
+@media (max-width:820px){.hero{min-height:0;padding-top:30px}.phones{--s:.62;height:440px;justify-content:center}.hdw{transform:scale(var(--s))}.btn{padding:0 34px;font-size:1.1rem;height:52px}}
+
+/* spinnable hero phone */
+.hrot{position:absolute;left:50%;top:50%;width:282px;height:572px;margin:-286px 0 0 -141px;transform:perspective(1800px) rotateZ(-32deg) rotateX(8deg) rotateY(-12deg);animation:hbob 7s ease-in-out infinite;transform-style:preserve-3d;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.hrot.grab{cursor:grabbing;animation-play-state:paused}
+.hspin{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.hph{left:0!important;top:0!important;width:100%!important;height:100%!important;margin:0!important;transform:none!important;animation:none!important;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.hback{position:absolute;inset:0;border:9px solid #0b0b0d;border-radius:50px;background:linear-gradient(160deg,#3a2f5e,#1a1428 70%);box-shadow:0 0 0 2px #4a4a54,0 0 0 4px #1b1b20;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;place-items:center}
+.cam{position:absolute;top:18px;right:18px;width:104px;height:104px;border-radius:28px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);display:grid;grid-template-columns:1fr 1fr;place-items:center;padding:12px}
+.cam i{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#4a4a5e,#0b0b12 65%);border:3px solid #23232e}
+.cam i:nth-of-type(3){grid-column:1}
+.hhint{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:.85rem;color:rgba(255,255,255,.55);white-space:nowrap;pointer-events:none}
+@media (max-width:820px){.hhint{bottom:-10px}}
+
+/* real thickness */
+.hspin{transform:rotateY(-20deg)}
+.hl{position:absolute;inset:0;border-radius:50px;background:linear-gradient(90deg,#6a6a76,#2a2a31 20%,#202026 80%,#55555f);backface-visibility:visible}
+.hph{transform:translateZ(13px)!important}
+.hback{transform:rotateY(180deg) translateZ(13px)}
+.hsc::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,0) 36%);pointer-events:none;z-index:6}
+
+/* burgundy titanium iPhone Pro look */
+.hl{background:linear-gradient(90deg,#9a5262,#5a2a36 20%,#43202a 80%,#8a4858)}
+.hph{box-shadow:0 0 0 2px #8f4c5c,0 0 0 4px #3a1a23}
+.hback{background:linear-gradient(160deg,#7a3646,#4a2330 55%,#35171f);box-shadow:0 0 0 2px #8f4c5c,0 0 0 4px #3a1a23;border-color:#1a0d12}
+.hback::before{content:"";position:absolute;left:8px;right:8px;top:35%;bottom:8px;border-radius:34px 34px 42px 42px;background:linear-gradient(180deg,rgba(255,200,215,.07),rgba(255,200,215,.03))}
+.hback>svg{fill:#d9a3b1;opacity:.5;margin-top:120px;position:relative}
+.cam{top:12px;right:12px;width:132px;height:140px;border-radius:30px;padding:0;display:block;background:linear-gradient(145deg,#6a2f3f,#4a2330);border:1px solid rgba(255,190,205,.22);box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.cam i{position:absolute;width:46px;height:46px;border-radius:50%;border:5px solid #8a4357;background:radial-gradient(circle at 35% 35%,#6b6b80,#0a0a10 62%);box-shadow:0 0 0 2px #3a1a23,inset 0 0 6px #000}
+.cam i:nth-of-type(1){left:68px;top:10px}
+.cam i:nth-of-type(2){left:12px;top:46px}
+.cam i:nth-of-type(3){left:68px;top:84px;grid-column:auto}
+.hbtn{position:absolute;width:6px;border-radius:3px;background:linear-gradient(90deg,#4a2330,#a35a6b,#4a2330)}
+.hbtn.l{left:-7px}.hbtn.r{right:-7px}
+/* default (space black) colour */
+.hl{background:linear-gradient(90deg,#6a6a76,#2c2c33 20%,#202026 80%,#55555f)}
+.hph{box-shadow:0 0 0 2px #5a5a66,0 0 0 4px #1b1b20}
+.hback{background:linear-gradient(160deg,#34343d,#1d1d23 60%,#141418);box-shadow:0 0 0 2px #5a5a66,0 0 0 4px #1b1b20;border-color:#0b0b0d}
+.hback::before{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025))}
+.hback>svg{fill:#d4d4dc;opacity:.5}
+.cam{background:linear-gradient(145deg,#3b3b45,#26262d);border-color:rgba(255,255,255,.16)}
+.cam i{border-color:#55555f;box-shadow:0 0 0 2px #17171c,inset 0 0 6px #000}
+.hbtn{background:linear-gradient(90deg,#2c2c33,#8a8a96,#2c2c33)}
+
+/* back-glass, camera plate and lens depth */
+.hback{transform-style:preserve-3d}
+.hback::before{transform:translateZ(.6px)}
+.hback>svg{transform:translateZ(1px)}
+.cam{transform-style:preserve-3d;transform:translateZ(7px)}
+.cp{position:absolute;inset:-1px;border-radius:30px;background:linear-gradient(145deg,#3a3a44,#222228)}
+.cam i{transform-style:preserve-3d;transform:translateZ(9px);background:radial-gradient(circle at 32% 30%,#8a8aa0 0,#2a2a36 22%,#07070c 62%)}
+.cam i::after{content:"";position:absolute;left:22%;top:18%;width:26%;height:20%;border-radius:50%;background:rgba(255,255,255,.35);filter:blur(1px)}
+.cl{position:absolute;inset:-5px;border-radius:50%;background:linear-gradient(135deg,#6a6a76,#34343c)}
+</style>
+</head>
+<body>
+<div class="bar" aria-hidden="true"></div>
+<header class="nav" aria-label="Main"><a class="logo" href="#" aria-label="Violet"><svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path d="M3 5h26L16 29z" fill="#e9e4ff"/><path d="M10 5h12l-6 11z" fill="#a78bfa"/></svg></a><div class="soc"><a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 .5A11.500 11.500 0 0 0 .5 12c0 5.100 3.300 9.400 7.900 10.900.6.100.8-.3.8-.6v-2c-3.200.7-3.900-1.500-3.900-1.500-.5-1.300-1.300-1.700-1.300-1.700-1-.7.1-.7.1-.7 1.200.1 1.800 1.200 1.800 1.200 1 1.800 2.700 1.300 3.400 1 .1-.8.4-1.300.7-1.600-2.600-.3-5.300-1.300-5.300-5.700 0-1.300.5-2.300 1.200-3.100-.1-.3-.5-1.500.1-3.100 0 0 1-.3 3.200 1.200a11 11 0 0 1 5.800 0c2.200-1.500 3.200-1.200 3.200-1.200.6 1.600.2 2.800.1 3.100.8.8 1.200 1.800 1.200 3.100 0 4.400-2.700 5.400-5.300 5.700.4.4.8 1.100.8 2.200v3.300c0 .3.2.7.8.6A11.500 11.500 0 0 0 12 .5z"/></svg></a><a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.200 2.300h3.300l-7.200 8.300 8.500 11.200h-6.700l-5.200-6.800-6 6.800H1.600l7.700-8.800L1.200 2.300H8l4.700 6.200 5.500-6.200zm-1.200 17.500h1.800L7 4.200H5l12 15.600z"/></svg></a><a href="#" aria-label="Bluesky"><svg viewBox="0 0 24 24"><path d="M5.200 3.500C7.900 5.500 10.800 9.600 12 11.700c1.200-2.100 4.100-6.200 6.800-8.200 2-1.500 5.200-2.600 5.200 1 0 .7-.4 6.100-.7 7-.9 3-3.900 3.800-6.600 3.300 4.700.8 5.900 3.500 3.300 6.200-4.900 5-7.100-1.300-7.600-2.900-.5 1.600-2.700 7.900-7.600 2.900-2.600-2.700-1.400-5.400 3.300-6.200-2.700.5-5.700-.3-6.600-3.300C.4 11.600 0 6.200 0 5.500c0-3.600 3.200-2.500 5.200-1z"/></svg></a><a href="#" aria-label="Patreon"><svg viewBox="0 0 24 24"><circle cx="15" cy="9.500" r="6.500"/><rect x="2" y="3" width="3.500" height="18"/></svg></a></div></header>
+<main>
+  <section class="hero" data-view="home">
+    <div>
+      <h1>Violet</h1>
+      <p class="lead">An alternative app store for seamless sideloading. No jailbreak needed, and <strong>no computer</strong> after the initial install, only a Wi-Fi connection.</p>
+      <div class="btns"><a class="btn primary" href="#get-started">Get Started</a><a class="btn ghost" href="#">Discord</a></div>
+    </div>
+    <div class="phones" aria-hidden="true"><div class="hdw">
+      <div class="hrot"><div class="hspin"><div class="hph"><div class="hsc">
+        <div class="hban"></div>
+        <div class="hisl"></div>
+        <div class="hst"><span>9:23</span><span class="hic"><svg viewBox="0 0 24 24" width="15" height="15" fill="#fff"><path d="M12 18.500a1.700 1.700 0 1 0 0 3.400 1.700 1.700 0 0 0 0-3.400zM12 4C8 4 4.400 5.600 1.800 8.200l1.800 1.800C5.700 8 8.700 6.600 12 6.600s6.300 1.400 8.400 3.400l1.800-1.800C19.600 5.600 16 4 12 4zm0 5.300c-2.600 0-4.900 1-6.600 2.700l1.800 1.800C8.600 12.500 10.200 11.900 12 11.900s3.400.6 4.800 1.900l1.800-1.800C16.900 10.300 14.600 9.300 12 9.300z" transform="translate(0 -1)"/></svg><b></b></span></div>
+        <div class="htop"><span class="pl">+</span><span class="tc">My Apps</span><span class="ra">Refresh All</span></div>
+        <div class="big">Active</div>
+        <div class="ac" style="--c:#7c3aed"><s style="background:linear-gradient(135deg,#22d3ee,#6366f1 50%,#d946ef);color:#fff">⇧</s><div><b>Violet</b><small>Violet Team</small></div><div class="ex"><i>Expires in</i><span class="pill dy">7 DAYS</span></div></div><div class="ac" style="--c:#a8801f"><s style="background:#f4f1ea;color:#000">📦</s><div><b>PojavLauncher</b><small>PojavLauncherTeam</small></div><div class="ex"><i>Expires in</i><span class="pill dy">7 DAYS</span></div></div><div class="ac" style="--c:#2a6f97"><s style="background:linear-gradient(135deg,#38bdf8,#2563eb);color:#fff">🎮</s><div><b>Provenance</b><small>Joe Mattiello</small></div><div class="ex"><i>Expires in</i><span class="pill dy">7 DAYS</span></div></div>
+        <div class="big">Inactive</div>
+        <div class="ac off" style="--c:#444"><s style="background:#f4f1ea;color:#000">🌀</s><div><b>Flycast</b><small>Flyinghead</small></div><span class="pill a1">ACTIVATE</span></div><div class="ac off" style="--c:#444"><s style="background:#f4f1ea;color:#000">🐬</s><div><b>DolphiniOS</b><small>OatmealDome</small></div><span class="pill a2">ACTIVATE</span></div>
+        <div class="htb"><span><svg viewBox="0 0 24 24"><path d="M5 4h11a2 2 0 0 1 2 2v13H7a2 2 0 0 1-2-2zM18 8h2v9a2 2 0 0 1-2 2M8 8h7M8 12h7M8 15h4"/></svg>News</span><span><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>Browse</span><span class="on"><svg viewBox="0 0 24 24"><rect x="5" y="9" width="14" height="10" rx="2.5"/><path d="M8 6h8M10 3h4"/></svg>My Apps</span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>Settings</span></div>
+      </div></div>
+        <div class="hback"><div class="cam"><i></i><i></i><i></i></div><svg viewBox="0 0 24 24" width="58" height="58" fill="#e9e4f5" opacity=".9" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg></div>
+      </div></div>
+      <div class="hhint">↔ Drag to spin</div>
+      <div class="hshadow"></div>
+    </div></div>
+  </section>
+  <section class="section grid" data-view="home">
+    <article class="card rv"><small>Apps</small><h2>Install any .ipa</h2><p>Violet allows you to install any app you want, alongside the many available in our verified sources. And with the in-app JIT enabler, you can play hardware-accelerated games, emulators and anything else.</p></article>
+    <article class="card rv" style="--d:.1s"><small>Open Source</small><h2>Free, forever</h2><p>Violet is fully open-source and run by contributors, supported by our community and our patrons. You can find the source code for all our projects on <a href="#">GitHub</a>, and you can freely contribute to the project.</p></article>
+  </section>
+  <section class="section demo" data-view="home" id="demo">
+    <div class="rv">
+      <small>Demo</small>
+      <h2>Try it right here</h2>
+      <p>This is a mock-up of the app, not the real thing. Poke around and see how it feels.</p>
+      <div class="seg" role="group" aria-label="Device"><button class="on" data-dev="iphone">iPhone</button><button data-dev="ipad">iPad</button></div>
+      <ul>
+        <li>Tap <b>Browse</b> or the <b>+</b> to get an app.</li>
+        <li>Tap a days counter, or <b>Refresh All</b>, to renew apps.</li>
+        <li>Open <b>Settings</b> and turn on JIT or background refresh.</li>
+        <li>Use “Simulate a week passing” to see what happens when apps expire.</li>
+      </ul>
+    </div>
+    <div class="dev rv" id="dv" style="--d:.1s"><div class="dp" id="dp"></div></div>
+  </section>
+  <section class="section gs" data-view="start" hidden>
+    <a class="back" href="#">← Back</a>
+    <h1 class="rv">Get Started</h1>
+    <p class="lead rv">Set up Violet once with a computer. After that, all you need is Wi-Fi.</p>
+    <h2 class="gh rv">What you need</h2>
+    <ul class="need rv"><li>An iPhone or iPad on iOS/iPadOS 15 or later</li><li>A Windows, macOS or Linux computer, for the first install only</li><li>A USB cable</li><li>An Apple ID</li><li>A Wi-Fi connection</li></ul>
+    <h2 class="gh rv">Install</h2>
+    <ol class="guide">
+      <li class="rv"><h4>Install the VPN helper</h4><p>On your device, install <b>LocalDevVPN</b> from the App Store and open it. Violet uses it to install and refresh apps over Wi-Fi.</p></li>
+      <li class="rv"><h4>Download the installer</h4><p>On your computer, download and run the installer, then connect your device with a USB cable.</p></li>
+      <li class="rv"><h4>Allow the connection</h4><p>Tap <b>Allow</b> on your device, then enter the code it shows into the installer and submit it.</p></li>
+      <li class="rv"><h4>Install Violet</h4><p>Select your device in the installer, choose <b>Violet (Stable)</b>, and wait for it to finish.</p></li>
+      <li class="rv"><h4>Trust the app</h4><p>On your device, open <b>Settings › General › VPN &amp; Device Management</b> and trust your Apple ID profile.</p></li>
+      <li class="rv"><h4>Sign in and refresh</h4><p>Open Violet, sign in with your Apple ID, then tap the days counter next to Violet in My Apps. If asked to revoke or create a certificate, tap <b>Yes</b>.</p></li>
+    </ol>
+    <h2 class="gh rv">Add your first app</h2>
+    <ol class="guide">
+      <li class="rv"><h4>Tap +</h4><p>In My Apps, tap the plus button at the top left.</p></li>
+      <li class="rv"><h4>Choose an .ipa</h4><p>Pick a file from your device, or browse a verified source, and wait for it to appear.</p></li>
+    </ol>
+    <div class="warn rv"><b>Keep LocalDevVPN on.</b> It must be running whenever you install, update or refresh apps. If it's off, background refresh stops working.</div>
+    <div class="btns rv" style="margin-top:34px"><a class="btn primary" href="#">Join the Discord</a><a class="btn ghost" href="#">Read the docs</a></div>
+  </section>
+</main>
+<footer>© Violet</footer>
+<script>
+(function(){
+  var d=document.documentElement;d.classList.add('js');
+  var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.2});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  var hero=document.querySelector('.hero'),tick=false;
+  function upd(){tick=false;var y=scrollY,h=d.scrollHeight-innerHeight;
+    d.style.setProperty('--p',h>0?y/h:0);
+    if(!rm){d.style.setProperty('--sy',y);d.style.setProperty('--sp',Math.min(y/(hero.offsetHeight||600),1))}}
+  addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
+  addEventListener('resize',upd);
+  function route(){var s=location.hash==='#get-started';
+    document.querySelectorAll('[data-view]').forEach(function(el){el.hidden=(el.dataset.view==='start')!==s});
+    scrollTo(0,0);upd();}
+  addEventListener('hashchange',route);route();
+  (function(){var el=document.getElementById('dp');if(!el)return;var dv=document.getElementById('dv');
+    var cat=[{n:'PojavLauncher',t:'PojavLauncherTeam',c:'#a8801f',ib:'#f4f1ea',e:'\ud83d\udce6',v:'3.0',sz:'95 MB',d:'Run Java games on your iPhone or iPad.'},{n:'Provenance',t:'Joe Mattiello',c:'#2a6f97',ib:'linear-gradient(135deg,#38bdf8,#2563eb)',e:'\ud83c\udfae',v:'2.2',sz:'60 MB',d:'A multi-system game emulator.',q:1},{n:'Flycast',t:'Flyinghead',c:'#6d4cc2',ib:'#f4f1ea',e:'\ud83c\udf00',j:1,v:'2.4',sz:'33 MB',d:'A fast emulator. Works best with JIT.'},{n:'DolphiniOS',t:'OatmealDome',c:'#3b82c4',ib:'#f4f1ea',e:'\ud83d\udc2c',j:1,v:'1.0',sz:'48 MB',d:'Play GameCube and Wii games. Needs JIT.'},{n:'Retro Player',t:'Violet Team',c:'#7c5cff',j:1,e:'\ud83c\udfae',v:'1.4.2',sz:'38 MB',d:'Play classic games with a clean, fast emulator. Turn on JIT in Settings for full speed.'},{n:'Notes Plus',t:'Example Dev',c:'#f06fb5',e:'\ud83d\udcdd',v:'2.0.1',sz:'21 MB',d:'A simple notes app with folders, tags and quick search.'},{n:'Tweak Box',t:'Example Dev',c:'#2fa88f',e:'\ud83e\uddf0',v:'0.9.8',sz:'12 MB',d:'A small toolbox of handy utilities for your device.'},{n:'Pixel Quest',t:'Violet Team',c:'#f5a742',j:1,e:'\ud83d\udd79\ufe0f',v:'1.1.0',sz:'64 MB',d:'A retro-style adventure game. Runs best with JIT enabled.'}];
+    var NEWS=[
+      {t:'Violet 1.0 is here',c:'Faster refreshing, a fresh look and a simpler setup.',tag:'RELEASE',src:'Violet Team',when:'2 days ago',a:'#6d3fe0',b:'#c084fc',body:['Violet 1.0 is out today. Refreshing apps is faster and more reliable, and the app has been redesigned.','Setup is simpler too. Pair your device once and Violet takes care of the rest over Wi\u2011Fi.']},
+      {t:'Using JIT with emulators',c:'Get full speed out of your favorite emulators.',tag:'GUIDE',src:'Violet Team',when:'5 days ago',a:'#1f8a70',b:'#4cc3a8',app:'Flycast',body:['Some emulators need JIT to run at full speed. You can switch it on from the app\u2019s menu inside Violet.','Open Settings, enable JIT, then launch the app from Violet.']},
+      {t:'Why only 3 active apps?',c:'A quick look at how free Apple IDs work.',tag:'EXPLAINER',src:'Violet Team',when:'1 week ago',a:'#c2410c',b:'#f5a742',body:['Apple lets free accounts have 3 active sideloaded apps at once, each signed for 7 days.','Extra apps stay inactive until you activate them. Violet refreshes your active apps before they expire.']},
+      {t:'Join the community',c:'Help, tips and chats with other users.',tag:'COMMUNITY',src:'Violet Team',when:'2 weeks ago',a:'#2563eb',b:'#38bdf8',body:['Our Discord is the best place to ask questions and share what you\u2019re running.','Contributors are welcome too. Open an issue or send a pull request.']}];
+    var ic={news:'<path d="M5 4h11a2 2 0 0 1 2 2v13H7a2 2 0 0 1-2-2zM18 8h2v9a2 2 0 0 1-2 2M8 8h7M8 12h7M8 15h4"/>',src:'<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>',apps:'<rect x="5" y="9" width="14" height="10" rx="2.500"/><path d="M8 6h8M10 3h4"/>',set:'<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.600 5.600l2.100 2.100M16.300 16.300l2.100 2.100M5.600 18.400l2.100-2.100M16.300 7.700l2.100-2.100"/>'};
+    var S={detail:null,dev:'iphone',tab:'apps',jit:false,bg:false,apps:[{n:'Violet',t:'Violet Team',c:'#7c3aed',ib:'linear-gradient(135deg,#22d3ee,#6366f1 50%,#d946ef)',e:'\u21e7',days:7,core:1},{n:'PojavLauncher',t:'PojavLauncherTeam',c:'#a8801f',ib:'#f4f1ea',e:'\ud83d\udce6',days:7},{n:'Provenance',t:'Joe Mattiello',c:'#2a6f97',ib:'linear-gradient(135deg,#38bdf8,#2563eb)',e:'\ud83c\udfae',days:7,q:1},{n:'Flycast',t:'Flyinghead',c:'#6d4cc2',ib:'#f4f1ea',e:'\ud83c\udf00',j:1,days:7,off:true},{n:'DolphiniOS',t:'OatmealDome',c:'#3b82c4',ib:'#f4f1ea',e:'\ud83d\udc2c',j:1,days:7,off:true}],busy:{},msg:'',mt:0};
+    function toast(m){S.msg=m;clearTimeout(S.mt);S.mt=setTimeout(function(){S.msg='';var t=el.querySelector('.toast');if(t)t.classList.remove('on')},1600);var t=el.querySelector('.toast');if(t){t.textContent=m;t.classList.add('on')}}
+    function find(n){return S.apps.filter(function(a){return a.n===n})[0]}
+    function view(){
+      var T={news:'News',src:'Browse',apps:'My Apps',set:'Settings'};
+      var h='<div class="sb"><span>9:23</span><span class="hic"><svg viewBox="0 0 24 24" width="15" height="15" fill="#fff"><path d="M12 18.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4zM12 4C8 4 4.4 5.6 1.8 8.2l1.8 1.8C5.7 8 8.7 6.6 12 6.6s6.3 1.4 8.4 3.4l1.8-1.8C19.6 5.6 16 4 12 4zm0 5.3c-2.600 0-4.900 1-6.600 2.700l1.800 1.800C8.600 12.500 10.200 11.900 12 11.900s3.400.6 4.800 1.900l1.800-1.800C16.900 10.300 14.600 9.300 12 9.300z" transform="translate(0 -1)"/></svg><b></b></span></div>'+(S.tab==='apps'&&!S.detail?'<div class="dban"><i>No updates available</i></div>':'')+'<div class="top">'+(S.tab==='apps'&&!S.detail?'<button class="pl" data-t="src" aria-label="Add app">+</button><span class="tc">My Apps</span><button data-a="all">Refresh All</button>':'<span>'+(S.detail?'<button data-a="back">\u2039 '+T[S.tab]+'</button>':'')+'</span>')+'</div><div class="ttl">'+(S.detail||S.tab==='apps'?'':T[S.tab])+'</div><div class="dbody">';
+      function bt(a){var o=!!find(a.n);return '<button class="pill '+(o?'op':'gr')+'" data-a="'+(o?'open':'get')+'" data-n="'+a.n+'">'+(S.busy[a.n]?'<span class="spin"></span>':(o?'OPEN':'FREE'))+'</button>'}
+      function meta(n){var x=find(n),c=cat.filter(function(q){return q.n===n})[0]||{};x=x||c;return {n:x.n,t:x.t,c:x.c,ib:x.ib,e:x.e,v:c.v||'1.0',sz:c.sz||'24 MB',d:c.d||'Violet is an alternative app store for seamless sideloading, with no jailbreak needed.'}}
+      function ico(a){return '<s style="--c:'+a.c+(a.ib?';background:'+a.ib+';color:#000':'')+'">'+a.e+'</s>'}
+      if(S.detail&&S.detail.indexOf('news:')!==0){var a=meta(S.detail),ins=find(a.n),shots='';
+        for(var k=0;k<3;k++)shots+='<div class="shot" style="--c:'+a.c+'"><b></b><i></i><i></i><i></i><i></i><i></i><i></i></div>';
+        h+='<div class="dt">'+ico(a)+'<div><b>'+a.n+'</b><small>'+a.t+'</small>'+bt(a)+'</div></div>'+
+          '<div class="stt"><div><small>VERSION</small><b>'+a.v+'</b></div><div><small>SIZE</small><b>'+a.sz+'</b></div><div><small>SOURCE</small><b>Example</b></div></div>'+
+          '<div class="sh">What\u2019s New</div><p class="ab">Version '+a.v+'. Bug fixes and speed improvements.</p>'+
+          '<div class="sh">Preview</div><div class="shots">'+shots+'</div>'+
+          '<div class="sh">About</div><p class="ab">'+a.d+'</p>'+
+          '<div class="sh">Information</div><div class="grp"><div class="lr">Developer<span>'+a.t+'</span></div><div class="lr">Version<span>'+a.v+'</span></div><div class="lr">Size<span>'+a.sz+'</span></div><div class="lr">Status<span>'+(!ins?'Not installed':(ins.off?'Inactive':(ins.days<=0?'Expired':'Active, '+ins.days+(ins.days===1?' day':' days')+' left')))+'</span></div></div>'+
+          (ins&&!ins.core?'<div class="grp"><div class="lr"><button class="rowb" data-a="'+(ins.off?'act':'deact')+'" data-n="'+a.n+'" style="color:'+(ins.off?'#a78bfa':'#ff6961')+'">'+(ins.off?'Activate':'Deactivate')+'</button></div></div>':'')}
+      else if(S.detail){var w=NEWS[+S.detail.slice(5)];
+        h+='<div class="nh" style="--a:'+w.a+';--b:'+w.b+'"><small>'+w.tag+'</small><b>'+w.t+'</b></div><div class="nm">'+w.src+' \u00b7 '+w.when+'</div>'+w.body.map(function(p){return '<p class="ab">'+p+'</p>'}).join('')+(w.app?'<div class="grp"><div class="lr"><button class="rowb" data-a="det" data-n="'+w.app+'" style="color:#a78bfa">View '+w.app+'</button></div></div>':'')}
+      else if(S.tab==='apps'){
+        function card(x,i){var ex=x.days<=0;
+          if(x.off)return '<div class="ac off" data-det="'+x.n+'">'+ico(x)+'<div><b>'+x.n+'</b><small>'+x.t+'</small></div><button class="pill '+(i%2?'a2':'a1')+'" data-a="act" data-n="'+x.n+'">ACTIVATE</button></div>';
+          return '<div class="ac" style="--c:'+x.c+'" data-det="'+x.n+'">'+ico(x)+'<div><b>'+x.n+(S.jit&&x.j?'<span class="jb">JIT</span>':'')+'</b><small>'+x.t+'</small></div><div class="ex"><i>'+(ex?'Expired':'Expires in')+'</i><button class="pill '+(ex?'rd':'dy')+'" data-a="ref" data-n="'+x.n+'">'+(ex?'REFRESH':x.days+(x.days===1?' DAY':' DAYS'))+'</button></div>'+(x.q?'<span class="q">?</span>':'')+'</div>'}
+        var on=S.apps.filter(function(x){return !x.off}),of=S.apps.filter(function(x){return x.off});
+        h+='<div class="big">Active</div>';on.forEach(function(x,i){h+=card(x,i)});
+        if(of.length){h+='<div class="big">Inactive</div>';of.forEach(function(x,i){h+=card(x,i)})}
+        h+='<p class="hint">Tap an app to see its info. Free accounts can have 3 active apps.</p>'}
+      else if(S.tab==='src'){h+='<div class="sh">Example Source</div><div class="grp">';
+        cat.forEach(function(a){h+='<div class="ar" data-det="'+a.n+'">'+ico(a)+'<div><b>'+a.n+'</b><small>'+a.t+'</small></div>'+bt(a)+'</div>'});
+        h+='</div><p class="hint">Tap an app for details. Made-up apps for the demo.</p>'}
+      if(S.tab==='news'&&!S.detail){NEWS.forEach(function(w,i){h+='<div class="nc" data-det="news:'+i+'"><div class="nci" style="--a:'+w.a+';--b:'+w.b+'"><small>'+w.tag+'</small><b>'+w.t+'</b></div><div class="ncs">'+w.src+' \u00b7 '+w.when+'</div><p class="ncc">'+w.c+'</p></div>'})}
+      if(S.tab==='set'){h+='<div class="sh">Account</div><div class="grp"><div class="lr">Apple ID<span>you@icloud.com</span></div></div><div class="sh">Features</div><div class="grp"><div class="lr">Background Refresh<button class="tg'+(S.bg?' on':'')+'" data-a="bg" aria-label="Background Refresh"></button></div><div class="lr">Enable JIT<button class="tg'+(S.jit?' on':'')+'" data-a="jit" aria-label="Enable JIT"></button></div></div><div class="grp"><div class="lr"><button data-a="week" style="color:#a78bfa">Simulate a week passing</button></div></div><p class="hint">With Background Refresh on, apps renew themselves. Off, they expire.</p>'}
+      h+='</div>';
+      var tz='<div class="toast'+(S.msg?' on':'')+'">'+S.msg+'</div>';
+      if(S.dev==='ipad'){var sd='<div class="side"><h6>Violet</h6>';
+        ['news','src','apps','set'].forEach(function(k){sd+='<button data-t="'+k+'" class="'+(S.tab===k?'on':'')+'"><svg viewBox="0 0 24 24">'+ic[k]+'</svg>'+T[k]+'</button>'});
+        el.className='dp ipad';dv.classList.add('ipad');el.innerHTML=sd+'</div><div class="mn">'+h+'</div>'+tz;return}
+      h+='<div class="tb">';
+      ['news','src','apps','set'].forEach(function(k){h+='<button data-t="'+k+'" class="'+(S.tab===k?'on':'')+'"><svg viewBox="0 0 24 24">'+ic[k]+'</svg>'+T[k]+'</button>'});
+      el.className='dp';dv.classList.remove('ipad');el.innerHTML=h+'</div>'+tz}
+    document.querySelectorAll('[data-dev]').forEach(function(b){b.addEventListener('click',function(){S.dev=b.dataset.dev;
+      document.querySelectorAll('[data-dev]').forEach(function(x){x.classList.toggle('on',x===b)});view()})});
+    el.addEventListener('click',function(e){var b=e.target.closest('button');if(!b){var r=e.target.closest('[data-det]');if(r){S.detail=r.dataset.det;view()}return}var a=b.dataset.a,n=b.dataset.n;
+      if(b.dataset.t){S.tab=b.dataset.t;S.detail=null;view();return}
+      if(a==='back'){S.detail=null;view();return}
+      if(a==='det'){S.detail=n;view();return}
+      if(a==='get'){if(S.busy[n])return;S.busy[n]=1;view();toast('Installing '+n+'\u2026');
+        setTimeout(function(){var c=cat.filter(function(x){return x.n===n})[0];delete S.busy[n];S.apps.push({n:c.n,t:c.t,c:c.c,ib:c.ib,q:c.q,e:c.e,j:c.j,days:7,off:S.apps.filter(function(q){return !q.off}).length>=3});toast(n+' installed');view()},1200);return}
+      if(a==='deact'){find(n).off=true;toast(n+' deactivated')}
+      else if(a==='act'){if(S.apps.filter(function(q){return !q.off}).length>=3){toast('Only 3 apps can be active')}else{var q=find(n);q.off=false;q.days=7;toast(n+' activated')}}
+      else if(a==='ref'){find(n).days=7;toast('Refreshed '+n)}
+      else if(a==='all'){S.apps.forEach(function(x){if(!x.off)x.days=7});toast('Refreshed all apps')}
+      else if(a==='open'){var x=find(n);toast(x.days<=0?'App expired. Refresh it first.':(S.jit&&x.j?'Launched with JIT':'Launched '+n))}
+      else if(a==='jit'){S.jit=!S.jit;toast(S.jit?'JIT enabled':'JIT off')}
+      else if(a==='bg'){S.bg=!S.bg;toast(S.bg?'Background refresh on':'Background refresh off')}
+      else if(a==='week'){S.apps.forEach(function(x){x.days=S.bg?7:0});toast(S.bg?'All apps refreshed in the background':'A week passed. Apps expired.')}
+      view()});
+    view();
+  })();
+  (function(){var r=document.querySelector('.hrot');if(!r)return;var sp=r.querySelector('.hspin'),ry=-20,rx=0,vy=0,drag=false,lx=0,ly=0,raf;
+    for(var z=-12;z<=12;z++){var l=document.createElement('div');l.className='hl';l.style.transform='translateZ('+z+'px)';sp.insertBefore(l,sp.firstChild)}
+    [['l',92,30],['l',146,52],['l',206,52],['r',170,84],['r',390,52]].forEach(function(b){var e=document.createElement('div');e.className='hbtn '+b[0];e.style.top=b[1]+'px';e.style.height=b[2]+'px';sp.appendChild(e)});
+    var cam=r.querySelector('.cam');if(cam){for(var k=1;k<=7;k++){var p=document.createElement('div');p.className='cp';p.style.transform='translateZ(-'+k+'px)';cam.insertBefore(p,cam.firstChild)}
+      cam.querySelectorAll('i').forEach(function(i){for(var k=1;k<=9;k++){var c=document.createElement('div');c.className='cl';c.style.transform='translateZ(-'+k+'px)';i.appendChild(c)}})}
+    function set(){sp.style.transform='rotateY('+ry+'deg) rotateX('+rx+'deg)'}
+    function coast(){if(drag)return;ry+=vy;vy*=.95;rx*=.9;if(Math.abs(vy)<.05&&Math.abs(rx)<.05){vy=0;rx=0;set();return}set();raf=requestAnimationFrame(coast)}
+    r.addEventListener('pointerdown',function(e){drag=true;lx=e.clientX;ly=e.clientY;vy=0;cancelAnimationFrame(raf);try{r.setPointerCapture(e.pointerId)}catch(_){}r.classList.add('grab')});
+    r.addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;ry+=dx*.7;vy=dx*.7;rx=Math.max(-25,Math.min(25,rx-dy*.3));set()});
+    function end(){if(!drag)return;drag=false;r.classList.remove('grab');coast()}
+    r.addEventListener('pointerup',end);r.addEventListener('pointercancel',end);
+  })();
+})();
+</script>
+</body>
+</html>
